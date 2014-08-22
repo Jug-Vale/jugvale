@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+        xmlns:tx="http://www.springframework.org/schema/tx" xmlns:jaxrs="http://cxf.apache.org/jaxrs"
+        xsi:schemaLocation="
+                                http://www.springframework.org/schema/beans 
+                                http://www.springframework.org/schema/beans/spring-beans-3.1.xsd 
+                                http://www.springframework.org/schema/context 
+                                http://www.springframework.org/schema/context/spring-context-3.1.xsd
+                                http://www.springframework.org/schema/tx 
+                                http://www.springframework.org/schema/tx/spring-tx-3.1.xsd
+                                http://cxf.apache.org/jaxrs
+                				http://cxf.apache.org/schemas/jaxrs.xsd">
+
+        <!-- ########################################## -->
+        <!-- ## Integração do Spring com o Hibernate ## -->
+        <!-- ########################################## -->
+
+        <!-- ================ Configuracao de dataSource utilizando pool de conexoes ================ -->
+        <bean id="datasource" class="org.apache.commons.dbcp.BasicDataSource">
+
+                <property name="driverClassName" value="${database.driver}" />
+                <property name="url" value="${database.url}" />
+                <property name="username" value="${database.user}" />
+                <property name="password" value="${database.pass}" />
+
+                <!-- configuracao do pool DBCP -->
+                <property name="maxActive" value="3" />
+                <property name="maxIdle" value="2" />
+                <property name="minIdle" value="0" />
+                <property name="maxWait" value="-1" />
+                <property name="validationQuery" value="select 1" />
+                <property name="testOnBorrow" value="true" />
+                <property name="testOnReturn" value="false" />
+                <property name="testWhileIdle" value="false" />
+                <property name="timeBetweenEvictionRunsMillis" value="-1" />
+                <property name="numTestsPerEvictionRun" value="3" />
+                <property name="minEvictableIdleTimeMillis" value="1800000" /> <!-- 30 * 60seg * 1000miliseg = 30min -->
+
+        </bean>
+
+        <!-- ################## Session Factory junto ao Spring ################## -->
+
+        <bean id="sessionFactory"
+                class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+                <property name="dataSource" ref="datasource" />
+                <property name="namingStrategy">
+                        <bean class="org.hibernate.cfg.DefaultComponentSafeNamingStrategy" />
+                </property>
+                <property name="packagesToScan">
+                        <list>
+                                <value>br.com.jugvale.entity</value>
+                        </list>
+                </property>
+
+                <!-- ================ Hibernate Propriedades ================ -->
+                <property name="hibernateProperties">
+                        <props>
+                                <prop key="hibernate.dialect">${database.dialect}</prop>
+                                <prop key="hibernate.generate_statistics">false</prop>
+                                <prop key="hibernate.show_sql">true</prop>
+                                <prop key="hibernate.format_sql">true</prop>
+                                <prop key="hibernate.hbm2ddl.auto">update</prop>
+                                <prop key="hibernate.default_schema">${database.defaultschema}</prop>
+                                <prop key="hibernate.cache">false</prop>
+                                <prop key="hibernate.cache.use_query_cache">false</prop>
+                                <prop key="hibernate.cache.use_structured_cache">false</prop>
+                                <prop key="hibernate.cache.use_second_level_cache">false</prop>
+                                <prop key="hibernate.cache.use_structured_entries">false</prop>
+                                <prop key="hibernate.query.substitutions">true '1', false '0'"</prop>
+                                <!-- <prop key="hibernate.current_session_context_class">thread</prop> -->
+                                <!-- <prop key="hibernate.cache.provider_configuration_file_resource_path">ehcache.xml</prop> -->
+                                <!-- <prop key="hibernate.cache.provider_class">org.hibernate.cache.EhCacheProvider</prop> -->
+                                <!-- <prop key="hibernate.temp.use_jdbc_metadata_defaults">false</prop> -->
+                        </props>
+                </property>
+        </bean>
+
+
+        <!-- ###################### Transaction Manager ###################### -->
+
+        <bean id="transactionManager"
+                class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+                <property name="sessionFactory" ref="sessionFactory" />
+        </bean>
+
+        <!-- ################## Configuração Spring ################## -->
+
+        <!-- ================ Arquivos de configuracao *.properties ================ -->
+        <bean id="propertyConfigurer"
+                class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+                <property name="locations">
+                        <list>
+                                <value>classpath:/jdbc.properties</value>
+                        </list>
+                </property>
+        </bean>
+
+        <!-- ================ Pool de Threads ================ -->
+        <bean id="taskExecutor"
+                class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+                <property name="corePoolSize" value="5" />
+                <property name="maxPoolSize" value="10" />
+                <property name="queueCapacity" value="25" />
+        </bean>
+        
+        
+        <!-- ================ Anotation ================ -->
+
+        <!-- Activates various annotations to be detected in bean classes: Spring's 
+                @Required and @Autowired, as well as JSR 250's @Resource. -->
+        <context:annotation-config />
+
+        <!-- Habilita os Services para serem transicionais via a Annotation @Transactional -->
+        <tx:annotation-driven />
+        <tx:annotation-driven transaction-manager="transactionManager" />
+
+        <!-- ================ SCANS ================ -->
+
+        <!-- Carrega os Beans de Servico -->
+        <context:component-scan base-package="br.com.jugvale.dao" />
+        <context:component-scan base-package="br.com.jugvale.business" />
+        <context:component-scan base-package="br.com.jugvale.recursos" />
+        
+        <jaxrs:server id="restContainer" address="/">
+
+		<jaxrs:serviceBeans>
+			<ref bean="servicoUsuarioWS" />
+			<ref bean="servicoPalestranteWS"/>
+			<ref bean="servicoPalestraWS" />
+			<ref bean="servicoEventoWS" />
+		</jaxrs:serviceBeans>
+
+		<jaxrs:providers>
+			<ref bean="cors-filter" />
+			<ref bean="jaxbProvider" />
+			<ref bean="jsonProvider" />
+		</jaxrs:providers>
+
+	</jaxrs:server>
+	<bean id="cors-filter" class="org.apache.cxf.rs.security.cors.CrossOriginResourceSharingFilter" />
+	<bean id="jaxbProvider" class="org.apache.cxf.jaxrs.provider.JAXBElementProvider" />
+	<bean id="jsonProvider" class="org.codehaus.jackson.jaxrs.JacksonJsonProvider" />
+</beans>

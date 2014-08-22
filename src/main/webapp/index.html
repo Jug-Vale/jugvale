@@ -1,0 +1,242 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />  
+	<title>Serviços Jug Vale</title>
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="dist/css/bootstrap.min.css">
+	<!-- Optional theme -->
+	<link rel="stylesheet" href="dist/css/bootstrap-theme.min.css">
+	<!-- Latest compiled and minified JavaScript -->
+	<script src="dist/js/bootstrap.min.js"></script>  
+</head>
+<body>
+  <div class="container">
+  	<h3>As URIs</h3>
+  	<p>
+  		Considerando a URL base <a href="http://jugvale-pedrohos.rhcloud.com/JugVale/apiJugVale/">http://jugvale-pedrohos.rhcloud.com/JugVale/apiJugVale/</a>, temos as seguintes URIs para acesso aos dados dos candidatos
+  	</p>
+  	<table id="tabelaServicos" class="table table-hover">
+      <caption>
+      	<h3>
+      		Serviços <a href="http://jugvale.com" target="_blank">JUGVale</a>
+      	</h3>
+      </caption>
+  		<thead>
+    		<tr>
+          <th>Implementado</th>
+    		  <th>Método</th>
+		      <th>URI</th>
+		      <th>Descrição</th>
+		      <th>Parâmetros aceitos</th>
+		      <th>Exemplo</th>
+	 	    </tr>
+      	</thead>
+      	<tbody>
+          <!-- Usuario -->
+          <tr>
+            <td><p class="text-error">Não</p></td>
+            <td>GET</td>
+            <td>/usuario/buscar</td>
+            <td>Busca todos os usuários</td>
+            <td> - </td>
+            <td><a href="http://jugvale-pedrohos.rhcloud.com/JugVale/apiJugVale/usuario/buscar" target="_blank">http://jugvale-pedrohos.rhcloud.com/JugVale/apiJugVale/usuario/buscar</a></td>
+          </tr>
+        	<tr>
+            <td><p class="text-error">Não</p></td>
+        		<td>GET</td>
+          	<td>/usuario/buscar/ativos</td>
+          	<td>Busca todos os usuários ativos</td>
+          	<td> - </td>
+          	<td><a href="http://jugvale-pedrohos.rhcloud.com/JugVale/apiJugVale/usuario/buscar/ativos" target="_blank">http://jugvale-pedrohos.rhcloud.com/JugVale/apiJugVale/usuario/buscar/ativos</a></td>
+        	</tr>
+        	<tr>
+            <td><p class="text-sucess">Sim</p></td>
+        		<td>GET</td>
+          	<td>/usuario/buscar/id/{id}</td>
+          	<td>Busca o usuário por id</td>
+          	<td> o parâmetro ID deve ser uma <b>String</b> </td>
+          	<td><a href="http://jugvale-pedrohos.rhcloud.com/JugVale/apiJugVale/usuario/buscar/id/1" target="_blank">http://jugvale-pedrohos.rhcloud.com/JugVale/apiJugVale/usuario/buscar/id/1</a></td>
+        	</tr>
+        	<tr>
+            <td><p class="text-sucess">Sim</p></td>
+        		<td>POST</td>
+          	<td>/usuario/cadastrar</td>
+          	<td>Faz inscrição do usuário no JUGVale</td>
+          	<td>
+              <i>Nome: </i>String<br/>
+              <i>E-Mail: </i>String
+            </td>
+          	<td>
+              <a href="#jsonCadastroUsuario">Veja Exemplo de Json de Envio</a>
+            </td>
+        	</tr>
+          <!-- Palestrante -->
+          <tr>
+            <tr>
+            <td><p class="text-error">Não</p></td>
+            <td>GET</td>
+            <td>/palestrante/buscar</td>
+            <td>Busca todos os palestrantes</td>
+            <td> - </td>
+            <td><a href="http://jugvale-pedrohos.rhcloud.com/JugVale/apiJugVale/palestrante/buscar" target="_blank">http://jugvale-pedrohos.rhcloud.com/JugVale/apiJugVale/palestrante/buscar</a></td>
+          </tr>
+            <td class="text-error">Não</td>
+            <td>GET</td>
+            <td>/palestrante/buscar/ativos</td>
+            <td>Busca todos os palestrantes ativos</td>
+            <td> - </td>
+            <td><a href="http://jugvale-pedrohos.rhcloud.com/JugVale/apiJugVale/palestrante/buscar/ativos" target="_blank">http://jugvale-pedrohos.rhcloud.com/JugVale/apiJugVale/palestrante/buscar/ativos</a></td>
+          </tr>
+          <tr>
+            <td><p class="text-sucess">Sim</p></td>
+            <td>GET</td>
+            <td>/palestrante/buscar/id/{id}</td>
+            <td>Busca todos o palestrantes por id</td>
+            <td> o parâmetro ID deve ser uma <b>String</b> </td>
+            <td><a href="http://jugvale-pedrohos.rhcloud.com/JugVale/apiJugVale/palestrante/buscar/id/1" target="_blank">http://jugvale-pedrohos.rhcloud.com/JugVale/apiJugVale/palestrante/buscar/id/1</a></td>
+          </tr>
+          <tr>
+            <td><p class="text-sucess">Sim</p></td>
+            <td>POST</td>
+            <td>/palestrante/cadastrar</td>
+            <td>Faz cadastro do palestrante</td>
+            <td>
+              <i>Nome: </i>String<br/>
+              <i>E-Mail: </i>String<br/>
+              <i>MiniCV: </i>String
+            </td>
+            <td>
+              <a href="#jsonCadastroPalestrante">Veja Exemplo de Json de Envio</a>
+            </td>
+          </tr>
+
+          <!-- Palestra -->
+          <tr>
+            <tr>
+            <td><p class="text-error">Não</p></td>
+            <td>GET</td>
+            <td>/palestra/buscar</td>
+            <td>Busca todos as palestra</td>
+            <td> - </td>
+            <td><a href="http://jugvale-pedrohos.rhcloud.com/JugVale/apiJugVale/palestra/buscar" target="_blank">http://jugvale-pedrohos.rhcloud.com/JugVale/apiJugVale/palestra/buscar</a></td>
+          </tr>
+            <td><p class="text-error">Não</p></td>
+            <td>GET</td>
+            <td>/palestra/buscar/ativos</td>
+            <td>Busca todos as palestra ativos</td>
+            <td> - </td>
+            <td><a href="http://jugvale-pedrohos.rhcloud.com/JugVale/apiJugVale/palestra/buscar/ativos" target="_blank">http://jugvale-pedrohos.rhcloud.com/JugVale/apiJugVale/palestra/buscar/ativos</a></td>
+          </tr>
+          <tr>
+            <td><p class="text-sucess">Sim</p></td>
+            <td>GET</td>
+            <td>/palestra/buscar/id/{id}</td>
+            <td>Busca palestra por id</td>
+            <td> o parâmetro ID deve ser uma <b>String</b> </td>
+            <td><a href="http://jugvale-pedrohos.rhcloud.com/JugVale/apiJugVale/palestra/buscar/id/2" target="_blank">http://jugvale-pedrohos.rhcloud.com/JugVale/apiJugVale/palestra/buscar/id/2</a></td>
+          </tr>
+          <tr>
+            <td><p class="text-sucess">Sim</p></td>
+            <td>POST</td>
+            <td>/palestra/cadastrar</td>
+            <td>Faz cadastro do palestra</td>
+            <td>
+              <i>Título: </i>String<br/>
+              <i>Tema: </i>String<br/>
+              <i>Hora Aprensntação: </i>String no formato <b>HH:mm:ss</b>
+              <i>Palestrante: </i>Passando o <a href="#jsonCadastroPalestrante">Objeto Palestrante</a>
+            </td>
+            <td>
+              <a href="#jsonCadastroPalestra">Veja Exemplo de Json de Envio</a>
+            </td>
+          </tr>
+          <!-- Evento -->
+          <tr>
+            <tr>
+            <td><p class="text-error">Não</p></td>
+            <td>GET</td>
+            <td>/evento/buscar</td>
+            <td>Busca todos as evento</td>
+            <td> - </td>
+            <td><a href="http://jugvale-pedrohos.rhcloud.com/JugVale/apiJugVale/evento/buscar" target="_blank">http://jugvale-pedrohos.rhcloud.com/JugVale/apiJugVale/evento/buscar</a></td>
+          </tr>
+            <td><p class="text-error">Sim</p></td>
+            <td>GET</td>
+            <td>/evento/buscar/ativos</td>
+            <td>Busca todos as evento ativos</td>
+            <td> - </td>
+            <td><a href="http://jugvale-pedrohos.rhcloud.com/JugVale/apiJugVale/evento/buscar/ativos" target="_blank">http://jugvale-pedrohos.rhcloud.com/JugVale/apiJugVale/evento/buscar/ativos</a></td>
+          </tr>
+          <tr>
+            <td><p class="text-sucess">Sim</p></td>
+            <td>GET</td>
+            <td>/evento/buscar/id/{id}</td>
+            <td>Busca evento por id</td>
+            <td> o parâmetro ID deve ser uma <b>String</b> </td>
+            <td><a href="http://jugvale-pedrohos.rhcloud.com/JugVale/apiJugVale/evento/buscar/id/2" target="_blank">http://jugvale-pedrohos.rhcloud.com/JugVale/apiJugVale/evento/buscar/id/2</a></td>
+          </tr>
+          <tr>
+            <td><p class="text-sucess">Não</p></td>
+            <td>POST</td>
+            <td>/evento/cadastrar</td>
+            <td>Faz cadastro do evento</td>
+            <td>
+              <i>Edicao: </i>String<br/>
+              <i>Dia: </i>String no formato <b>DD/MM/AAAA</b><br/>
+              <i>Hora Inicio: </i>String no formato <b>HH:mm:ss</b><br/>
+              <i>Hora Fim: </i>String no formato <b>HH:mm:ss</b><br/>
+              <i>Palestras: </i>Passando uma lista de <a href="#jsonCadastroPalestra">Objeto Palestra</a>
+            </td>
+            <td>
+              <a href="#jsonCadastroEvento">Veja Exemplo de Json de Envio</a>
+            </td>
+          </tr>
+        </tbody>
+  	</table>
+
+    <!-- Usuario -->
+    <div id="jsonCadastroUsuario" class="well">
+      <p class="lead">Json Envio para Cadastro de Usuário</p>
+      <code>
+          <code>{"nome":"Pedro Henrique", "email":"pedrospsjc@gmail.com"}</code>
+      </code>
+    </div>
+
+    <!-- Palestrante -->
+    <div id="jsonCadastroPalestrante" class="well">
+      <p class="lead">Json Envio para Cadastro de Palestrante</p>
+      <code>
+          {"nome":"Pedro HOS","email":"pedrospsjc@gmail.com","miniCV":"Mini CV do Palestrante"}
+      </code>
+    </div>
+
+    <!-- Palestra -->
+    <div id="jsonCadastroPalestra" class="well">
+      <p class="lead">Json Envio para Cadastro de Palestra</p>
+      <code>
+        {"titulo":"Extraindo ao máximo os recursos do Eclipse","tema":"Usando o Eclipse ao seu favor, dicas de produtividade","horaApresentacao":"8:0:00",<br/>
+        "palestrante":{"nome":"Pedro HOS","email":"pedrospsjc@gmail.com","miniCV":"MiniCV Palestrante."}}
+      </code>
+    </div>
+
+        <!-- Palestra -->
+    <div id="jsonCadastroEvento" class="well">
+      <p class="lead">Json Envio para Cadastro de Palestra</p>
+      <code>
+        {"edicao":"5 Encontro JugVale","dia":"26/10/2013","horaInicio":"8:0:00","horaFim":"14:0:00",
+        <br>"palestras":[{"titulo":"Titulo","tema":"Tema","horaApresentacao":"8:0:00",
+        <br>"palestrante":{"nome":"Pedro HOS","email":"pedrospsjc@gmail.com", "miniCV":"Mini Curriculum"}}]}
+      </code>
+    </div>
+
+    <hr>
+    
+    <address>
+      <strong>JugVale</strong><br>
+      <a href="mailto:jugvale@gmail.com">jugvale@gmail.com</a>
+      </address>
+  </div>
+
+</body>
+</html>
